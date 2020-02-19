@@ -1,20 +1,15 @@
 from flask_wtf import Form
 from flask_login import current_user
-from wtforms import StringField, DateField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import StringField, DateField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from app.models import User
 
 class RegisterForm(Form):
-  username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+  name = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
   email = StringField('Email', validators=[DataRequired(), Email()])
   password = PasswordField('Password', validators=[DataRequired()])
   confirm = PasswordField('Confirm', validators=[DataRequired(), EqualTo('password')])
   submit = SubmitField('Sing Up')
-
-  def validate_username(self, username):
-    user = User.query.filter_by(username=username.data).first()
-    if user:
-      raise ValidationError('Username already taken.')
 
   def validate_email(self, email):
     user = User.query.filter_by(email=email.data).first()
@@ -29,15 +24,11 @@ class LoginForm(Form):
   submit = SubmitField('Login')
 
 class UpdateAccountForm(Form):
-  username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
   email = StringField('Email', validators=[DataRequired(), Email()])
+  card_number = IntegerField('Card', validators=[Length(max=16)])
+  card_expiry = IntegerField('Expiry', validators=[Length(max=4)])
+  card_CVC = IntegerField('CVC', validators=[Length(max=3)])
   submit = SubmitField('Update')
-
-  def validate_username(self, username):
-    if username.data != current_user.username:
-      user = User.query.filter_by(username=username.data).first()
-      if user:
-        raise ValidationError('Username already taken.')
 
   def validate_email(self, email):
     if email.data != current_user.email:

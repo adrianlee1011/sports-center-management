@@ -6,18 +6,18 @@
       {{ form.hidden_tag() }}
       <fieldset class="form-group">
         <legend class="border-bottom mb-4">Join today</legend>
-        <!--username field-->
+        <!--name field-->
         <div class="form-group">
-          {{ form.username.label(class="form-control-label") }}
-          {% if form.username.errors %}
-            {{ form.username(class="form-control form-control-lg is-invalid") }}
+          {{ form.name.label(class="form-control-label") }}
+          {% if form.name.errors %}
+            {{ form.name(class="form-control form-control-lg is-invalid") }}
             <div class="inalid-feedback">
-              {% for error in form.username.errors %}
+              {% for error in form.name.errors %}
                 <span>{{ error }}</span>
               {% endfor %}
             </div>
           {% else %}
-            {{ form.username(class="form-control form-control-lg") }}
+            {{ form.name(class="form-control form-control-lg") }}
           {% endif %}
         </div>
         <!--email field-->

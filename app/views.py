@@ -1,7 +1,7 @@
 from flask import render_template, flash, url_for, redirect, request, abort
 from app import app, db, models, bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from .forms import RegisterForm, LoginForm, UpdateAccountForm, PostForm
+from .forms import RegisterForm, LoginForm, UpdateAccountForm
 from datetime import datetime
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -9,13 +9,15 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route('/')
 @app.route('/home')
 def home():
-  page = request.args.get('page', 1, type=int)
-  posts = models.Post.query.order_by(models.Post.date.desc()).paginate(page=page, per_page=4)
-  return render_template('home.html', posts=posts)
+  return render_template('home.html')
 
 @app.route('/about')
 def about():
   return render_template('about.html', title='About')
+
+@app.route('/index')
+def index():
+  return render_template('index.html', title='Index')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -24,10 +26,10 @@ def register():
   form = RegisterForm()
   if form.validate_on_submit():
     hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-    user = models.User(username=form.username.data, email=form.email.data, password=hashed_password)
+    user = models.User(name=form.name.data, email=form.email.data, password=hashed_password)
     db.session.add(user)
     db.session.commit()
-    flash(f'Account created for {form.username.data}!', 'success')
+    flash(f'Account created for {form.name.data}!', 'success')
     return redirect(url_for('login'))
   return render_template('register.html', title='Register', form=form)
 
@@ -61,6 +63,9 @@ def account():
   if form.validate_on_submit():
     current_user.username = form.username.data
     current_user.email = form.email.data
+    current_user.card_number = form.card_number.data
+    current_user.card_expiry = form.card_expiry.data
+    current_user.card_CVC = form.card_CVC.data
     db.session.commit()
     flash('Account has been updated', 'success')
     return redirect(url_for('account'))
@@ -68,17 +73,6 @@ def account():
     form.username.data = current_user.username
     form.email.data = current_user.email
   return render_template('account.html', title="Account", form=form)
-
-@app.route('/post/<int:post_id>/delete', methods=['POST'])
-@login_required
-def delete_post(post_id):
-  post = models.Post.query.get_or_404(post_id)
-  if post.author != current_user:
-    abort(403)
-  db.session.delete(post)
-  db.session.commit()
-  flash('Post deleted!', 'success')
-  return redirect(url_for('home'))
 
 @app.errorhandler(403)
 def access_forbidden_error(error):
