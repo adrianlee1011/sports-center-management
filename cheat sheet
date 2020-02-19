@@ -1,0 +1,41 @@
+from app import db, models
+import datetime
+models.RegistrationDetails.query.all()
+
+
+
+
+x = models.RegistrationDetails.query.all()
+x[0].email
+
+
+
+pip3 freeze
+
+to show all the used libraries
+
+pip3 --version
+python ? flask ?
+
+
+
+
+(flask) [sc18t2m@comp-pc3037 software_cw2]$ ls
+app  app.db  config.py  db_create.py  migrations  __pycache__  run.py  tmp
+(flask) [sc18t2m@comp-pc3037 software_cw2]$ sqlite3 app.db 
+SQLite version 3.7.17 2013-05-20 00:56:22
+Enter ".help" for instructions
+Enter SQL statements terminated with a ";"
+sqlite> .table
+alembic_version       registration_details
+sqlite> .headers on
+sqlite> .mode columns
+sqlite> select * from registration_details;
+sqlite> 
+
+
+
+
+
+
+
