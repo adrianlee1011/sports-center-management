@@ -3,7 +3,7 @@
   <div class="content-section">
     <div class="media">
       <div class="media-body">
-        <h2 class="account-heading">{{ current_user.username }}</h2>
+        <h2 class="account-heading">{{ current_user.name }}</h2>
         <p class="text-secondary">{{ current_user.email }}</p>
       </div>
     </div>
@@ -12,20 +12,6 @@
       {{ form.hidden_tag() }}
       <fieldset class="form-group">
         <legend class="border-bottom mb-4">Account Info</legend>
-        <!--username field-->
-        <div class="form-group">
-          {{ form.username.label(class="form-control-label") }}
-          {% if form.username.errors %}
-            {{ form.username(class="form-control form-control-lg is-invalid") }}
-            <div class="inalid-feedback">
-              {% for error in form.username.errors %}
-                <span>{{ error }}</span>
-              {% endfor %}
-            </div>
-          {% else %}
-            {{ form.username(class="form-control form-control-lg") }}
-          {% endif %}
-        </div>
         <!--email field-->
         <div class="form-group">
           {{ form.email.label(class="form-control-label") }}
@@ -38,6 +24,48 @@
             </div>
           {% else %}
             {{ form.email(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <!--card number field-->
+        <div class="form-group">
+          {{ form.card_number.label(class="form-control-label") }}
+          {% if form.card_number.errors %}
+            {{ form.card_number(class="form-control form-control-lg is-invalid") }}
+            <div class="inalid-feedback">
+              {% for error in form.card_number.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.card_number(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <!--card expiry field-->
+        <div class="form-group">
+          {{ form.card_expiry.label(class="form-control-label") }}
+          {% if form.card_expiry.errors %}
+            {{ form.card_expiry(class="form-control form-control-lg is-invalid") }}
+            <div class="inalid-feedback">
+              {% for error in form.card_expiry.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.card_expiry(class="form-control form-control-lg") }}
+          {% endif %}
+        </div>
+        <!--card CVC field-->
+        <div class="form-group">
+          {{ form.card_CVC.label(class="form-control-label") }}
+          {% if form.card_CVC.errors %}
+            {{ form.card_CVC(class="form-control form-control-lg is-invalid") }}
+            <div class="inalid-feedback">
+              {% for error in form.card_CVC.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.card_CVC(class="form-control form-control-lg") }}
           {% endif %}
         </div>
       <!--submit button-->

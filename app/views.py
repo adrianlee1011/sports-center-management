@@ -61,7 +61,6 @@ def logout():
 def account():
   form = UpdateAccountForm()
   if form.validate_on_submit():
-    current_user.username = form.username.data
     current_user.email = form.email.data
     current_user.card_number = form.card_number.data
     current_user.card_expiry = form.card_expiry.data
@@ -70,7 +69,6 @@ def account():
     flash('Account has been updated', 'success')
     return redirect(url_for('account'))
   elif request.method == 'GET':
-    form.username.data = current_user.username
     form.email.data = current_user.email
   return render_template('account.html', title="Account", form=form)
 
