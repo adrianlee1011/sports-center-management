@@ -70,6 +70,9 @@ def account():
     return redirect(url_for('account'))
   elif request.method == 'GET':
     form.email.data = current_user.email
+    form.card_number.data = current_user.card_number
+    form.card_expiry.data = current_user.card_expiry
+    form.card_CVC.data = current_user.card_CVC
   return render_template('account.html', title="Account", form=form)
 
 @app.errorhandler(403)

@@ -25,9 +25,9 @@ class LoginForm(Form):
 
 class UpdateAccountForm(Form):
   email = StringField('Email', validators=[DataRequired(), Email()])
-  card_number = IntegerField('Card', validators=[Length(max=16)])
-  card_expiry = IntegerField('Expiry', validators=[Length(max=4)])
-  card_CVC = IntegerField('CVC', validators=[Length(max=3)])
+  card_number = IntegerField('Card')
+  card_expiry = IntegerField('Expiry')
+  card_CVC = IntegerField('CVC')
   submit = SubmitField('Update')
 
   def validate_email(self, email):
