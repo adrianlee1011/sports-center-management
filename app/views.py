@@ -75,6 +75,11 @@ def account():
     form.card_CVC.data = current_user.card_CVC
   return render_template('account.html', title="Account", form=form)
 
+@app.route('/facilities')
+def facilities():
+  facilities = models.Facility.query.order_by(models.Facility.id.asc())
+  return render_template('facilities.html', title="Facilities", facilities=facilities)
+
 @app.errorhandler(403)
 def access_forbidden_error(error):
   return render_template('errors/403.html'), 403

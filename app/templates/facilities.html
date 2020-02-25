@@ -1,4 +1,12 @@
 {% extends "index.html" %}
 {% block content %}
-
+  {% for facility in facilities %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{{ url_for('facilities', facility=facility.name) }}">{{ facility.name }}</a>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
 {% endblock %}
