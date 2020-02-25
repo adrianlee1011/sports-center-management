@@ -11,31 +11,29 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css">
 
     {% if title %}
-      <title>Sticker - {{ title }}</title>
+      <title>Sports Centre - {{ title }}</title>
     {% else %}
-      <title>Sticker</title>
+      <title>Sports Centre</title>
     {% endif %}
   </head>
   <body>
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-          <a class="navbar-brand mr-4" href="/">Sticker</a>
+          <a class="navbar-brand mr-4" href="/">Sports Centre</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="/">Home</a>
-              {% if current_user.is_authenticated %}
-                <a class="nav-item nav-link" href="/followed">Followed</a>
-              {% endif %}
+              <a class="nav-item nav-link" href="/facilities">Facilities</a>
               <a class="nav-item nav-link" href="/about">About</a>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
-                <a class="nav-item nav-link" href="/post/new">New Post</a>
+                <a class="nav-item nav-link" href="/my_bookings">My Bookings</a>
                 <a class="nav-item nav-link" href="/account">Account</a>
                 <a class="nav-item nav-link" href="/logout">Logout</a>
               {% else %}
