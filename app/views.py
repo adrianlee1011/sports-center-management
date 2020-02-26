@@ -80,6 +80,34 @@ def facilities():
   facilities = models.Facility.query.order_by(models.Facility.id.asc())
   return render_template('facilities.html', title="Facilities", facilities=facilities)
 
+@app.route('/facilities/swimming_pool')
+def swimming_pool():
+  return render_template('facilities/swimming_pool.html', title="Swimming Pool")
+
+@app.route('/facilities/fitness_room')
+def fitness_room():
+  return render_template('facilities/fitness_room.html', title="Fitness Room")
+
+@app.route('/facilities/squash_court_1')
+def squash_court_1():
+  return render_template('facilities/squash_court_1.html', title="Squash Court 1")
+
+@app.route('/facilities/squash_court_2')
+def squash_court_2():
+  return render_template('facilities/squash_court_2.html', title="Squash Court 2")
+
+@app.route('/facilities/squash_court_3')
+def squash_court_3():
+  return render_template('facilities/squash_court_3.html', title="Squash Court 3")
+
+@app.route('/facilities/squash_court_4')
+def squash_court_4():
+  return render_template('facilities/squash_court_4.html', title="Squash Court 4")
+
+@app.route('/facilities/sports_hall')
+def sports_hall():
+  return render_template('facilities/sports_hall.html', title="Sports Hall")
+
 @app.errorhandler(403)
 def access_forbidden_error(error):
   return render_template('errors/403.html'), 403
@@ -91,4 +119,4 @@ def not_found_error(error):
 @app.errorhandler(500)
 def internal_error(error):
   db.session.rollback()
-  return render_template('/errors/500.html'), 500
+  return render_template('errors/500.html'), 500

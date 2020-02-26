@@ -20,6 +20,7 @@ class Facility(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   name = db.Column(db.String(100), nullable=False)
   capacity = db.Column(db.Integer)
+  url = db.Column(db.String(100))
 
 class Booking(db.Model):
   id = db.Column(db.Integer, primary_key=True)
