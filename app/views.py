@@ -90,7 +90,8 @@ def fitness_room():
 
 @app.route('/facilities/squash_court_1')
 def squash_court_1():
-  return render_template('facilities/squash_court_1.html', title="Squash Court 1")
+  bookings = models.Booking.query.order_by(models.Booking.id.asc())
+  return render_template('facilities/squash_court_1.html', title="Squash Court 1", bookings=bookings)
 
 @app.route('/facilities/squash_court_2')
 def squash_court_2():
