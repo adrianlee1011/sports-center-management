@@ -1,16 +1,24 @@
 {% extends "index.html" %}
 {% block content %}
-<p>display this pls</p>
-<h1>
-  {% block picture %}
-  {% endblock %}
-</h1>
-<h2>
-  {% block info %}
-  {% endblock %}
-</h2>
-<h1>
-  {% block timetable %}
-  {% endblock %}
-</h1>
+  <p>display this pls</p>
+  <h1>
+    {% block picture %}
+    {% endblock %}
+  </h1>
+  <h2>
+    {% block info %}
+    {% endblock %}
+  </h2>
+  <div class="grid-container">
+    <div>Time</div>
+    {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+      <div style="grid-row-start: header; grid-column-start: day-{{ loop.index0 }};">{{ day }}</div>
+    {% endfor %}
+    {% for time in ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"] %}
+      <div style="grid-row-start: time-{{ loop.index0 + 8 }}; grid-column-start: time;">{{ time }}</div>
+    {% endfor %}
+    {% for booking in bookings %}
+      <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }}; grid-column: day-{{ booking.datetime.weekday() }}">{{ booking.datetime.weekday() }}</div>
+    {% endfor %}
+  </div>
 {% endblock %}
