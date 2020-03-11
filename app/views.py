@@ -11,7 +11,11 @@ def get_week_number(date):
   return week
 
 def get_current_week():
-  current = datetime.strftime(datetime.now(), "%W")
+  current = int(datetime.strftime(datetime.now(), "%W"))
+  return current
+
+def get_current_year():
+  current = int(datetime.strftime(datetime.now(), "%Y"))
   return current
 
 def filter_by_week(bookings):
@@ -94,7 +98,7 @@ def account():
 def facilities():
   facilities = models.Facility.query.order_by(models.Facility.id.asc())
   return render_template('facilities.html', title="Facilities", facilities=facilities)
-
+'''
 @app.route('/facilities/swimming_pool')
 def swimming_pool():
   return render_template('facilities/swimming_pool.html', title="Swimming Pool")
@@ -102,13 +106,13 @@ def swimming_pool():
 @app.route('/facilities/fitness_room')
 def fitness_room():
   return render_template('facilities/fitness_room.html', title="Fitness Room")
-
-@app.route('/facilities/squash_court_1')
-def squash_court_1():
-  b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=1)
-  bookings = filter_by_week(b)
-  return render_template('facilities/squash_court_1.html', title="Squash Court 1", bookings=bookings)
-
+'''
+@app.route('/facilities/<facility_url>/<int:year>/<int:week>')
+def squash_court_1(facility_url, year, week):
+  facility = models.Facility.query.filter_by(url=facility_url).first_or_404()
+  bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week)
+  return render_template('facilities/squash_court_1.html', title="Squash Court 1", bookings=bookings, facility=facility_url, year=year, week=week)
+'''
 @app.route('/facilities/squash_court_2')
 def squash_court_2():
   return render_template('facilities/squash_court_2.html', title="Squash Court 2")
@@ -125,7 +129,7 @@ def squash_court_4():
 def sports_hall():
   bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=2)
   return render_template('facilities/sports_hall.html', title="Sports Hall", bookings=bookings)
-
+'''
 @app.errorhandler(403)
 def access_forbidden_error(error):
   return render_template('errors/403.html'), 403

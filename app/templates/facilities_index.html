@@ -20,4 +20,7 @@
       <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }}; grid-column: day-{{ booking.datetime.weekday() }}">{{ booking.datetime.weekday() }}</div>
     {% endfor %}
   </div>
+  <a href="/facilities/{{ facility }}/{{ year }}/{{ week - 1 }}">previous</a>
+  <a href="/facilities/{{ facility }}/{{ year }}/{{ week + 1 }}">next</a>
+  {{ week }}
 {% endblock %}

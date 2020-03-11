@@ -27,4 +27,6 @@ class Booking(db.Model):
   facility = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
   user = db.Column(db.Integer, db.ForeignKey('facility.id') , nullable=False)
   datetime = db.Column(db.DateTime, nullable=False)
+  week = db.Column(db.Integer)
+  year = db.Column(db.Integer)
   duration = db.Column(db.Integer, nullable=False)
