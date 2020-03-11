@@ -25,6 +25,15 @@ def filter_by_week(bookings):
       new.append(query)
   return new
 
+def is_integer_sequence(sequence, length):
+  if sequence == "none":
+    return True
+  if len(sequence) != length:
+    return False
+  if sequence.isdigit():
+    return True
+  return False
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -48,7 +57,7 @@ def register():
     user = models.User(name=form.name.data, email=form.email.data, password=hashed_password)
     db.session.add(user)
     db.session.commit()
-    flash(f'Account created for {form.name.data}!', 'success')
+    flash("Account created for %s!" %form.name.data, 'success')
     return redirect(url_for('login'))
   return render_template('register.html', title='Register', form=form)
 
@@ -81,11 +90,14 @@ def account():
   form = UpdateAccountForm()
   if form.validate_on_submit():
     current_user.email = form.email.data
-    current_user.card_number = form.card_number.data
-    current_user.card_expiry = form.card_expiry.data
-    current_user.card_CVC = form.card_CVC.data
-    db.session.commit()
-    flash('Account has been updated', 'success')
+    if is_integer_sequence(form.card_number.data, 16) and is_integer_sequence(form.card_expiry.data, 4) and is_integer_sequence(form.card_CVC.data, 3):
+      current_user.card_number = form.card_number.data
+      current_user.card_expiry = form.card_expiry.data
+      current_user.card_CVC = form.card_CVC.data
+      db.session.commit()
+      flash('Account has been updated', 'success')
+    else:
+      flash('Invalid card details', 'error')
     return redirect(url_for('account'))
   elif request.method == 'GET':
     form.email.data = current_user.email

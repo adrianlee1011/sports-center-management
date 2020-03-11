@@ -12,9 +12,9 @@ class User(db.Model, UserMixin):
   email = db.Column(db.String(100), unique=True, nullable=False)
   password = db.Column(db.String(50), nullable=False)
   user_type = db.Column(db.Integer, default=0)
-  card_number = db.Column(db.Integer, default=0)
-  card_expiry = db.Column(db.Integer, default=0)
-  card_CVC = db.Column(db.Integer, default=0)
+  card_number = db.Column(db.String, default="none")
+  card_expiry = db.Column(db.String, default="none")
+  card_CVC = db.Column(db.String, default="none")
 
 class Facility(db.Model):
   id = db.Column(db.Integer, primary_key=True)
