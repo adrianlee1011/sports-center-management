@@ -35,3 +35,8 @@ class UpdateAccountForm(Form):
       user = User.query.filter_by(email=email.data).first()
       if user:
         raise ValidationError('Email already registered.')
+
+class BookingForm(Form):
+  duration = IntegerField('Duration', validators=[DataRequired()])
+  submit = SubmitField('Make Booking')
+  

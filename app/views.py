@@ -1,7 +1,7 @@
 from flask import render_template, flash, url_for, redirect, request, abort
 from app import app, db, models, bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from .forms import RegisterForm, LoginForm, UpdateAccountForm
+from .forms import RegisterForm, LoginForm, UpdateAccountForm, BookingForm
 from datetime import datetime
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -9,6 +9,10 @@ from flask_login import login_user, current_user, logout_user, login_required
 def get_week_number(date):
   week = datetime.strftime(date, "%W")
   return week
+
+def get_year_number(date):
+  year = datetime.strftime(date, "%Y")
+  return year
 
 def get_current_week():
   current = int(datetime.strftime(datetime.now(), "%W"))
@@ -105,6 +109,19 @@ def account():
     form.card_expiry.data = current_user.card_expiry
     form.card_CVC.data = current_user.card_CVC
   return render_template('account.html', title="Account", form=form)
+
+@app.route('/my_bookings', methods=['GET', 'POST'])
+@login_required
+def my_booking():
+  facility = 1
+  form = BookingForm()
+  if form.validate_on_submit():
+    print('yeeeey', 'success')
+    booking = models.Booking(facility=facility, user=current_user.id, datetime=datetime.now(), week=get_current_week(), year=get_current_year(), duration=form.duration.data)
+    db.session.add(booking)
+    db.session.commit()
+    return redirect(url_for('my_booking'))
+  return render_template('my_bookings.html', title="My Bookings", form=form)
 
 @app.route('/facilities')
 def facilities():

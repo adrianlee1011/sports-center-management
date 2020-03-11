@@ -85,20 +85,32 @@ a.article-title:hover {
     [day-4] 1fr
     [day-5] 1fr
     [day-6] 1fr;
-  grid-gap: 10px;
-  background-color: #2196F3;
+  grid-gap: 2px;
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(17, 14, 32, 0.8);
   text-align: center;
   padding: 1px 0;
   font-size: 20px;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.grid-sub-header {
+  display: grid;
+  background-color: #2196F3;
+  padding: 10px;
+  grid-auto-columns: 1fr;
+}
+
+.grid-sub-header > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 1px 0;
+  font-size: 22px;
 }
 
 .grid-sub {
   display: grid;
   grid-template-rows:
-    [header] 1fr
     [time-8] 1fr
     [time-9] 1fr
     [time-10] 1fr
@@ -108,8 +120,8 @@ a.article-title:hover {
     [time-14] 1fr
     [time-15] 1fr
     [time-16] 1fr;
-  grid-gap: 10px;
-  background-color: #2196F3;
+  grid-gap: 20px;
+  background-color: rgb(55, 106, 145);
   padding: 10px;
   grid-auto-columns: 1fr;
 }

@@ -11,7 +11,7 @@ class User(db.Model, UserMixin):
   name = db.Column(db.String(100), nullable=False)
   email = db.Column(db.String(100), unique=True, nullable=False)
   password = db.Column(db.String(50), nullable=False)
-  user_type = db.Column(db.Integer, default=0)
+  user_type = db.Column(db.Integer, default=1)
   card_number = db.Column(db.String, default="none")
   card_expiry = db.Column(db.String, default="none")
   card_CVC = db.Column(db.String, default="none")
