@@ -116,7 +116,17 @@ def facilities():
 @app.route('/facilities/<facility_url>/<int:year>/<int:week>')
 def show_facility(facility_url, year, week):
   facility = models.Facility.query.filter_by(url=facility_url).first_or_404()
-  bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week)
+  
+  bookings = []
+  for i in range(8):
+    b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
+    filtered_b = []
+    for query in b:
+      if query.datetime.weekday() == i-1:
+        filtered_b.append(query)
+    bookings.append(filtered_b)
+  
+  #bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
   address = 'facilities/' + facility.url + '.html'
   title = facility.name
   return render_template(address, title=title, bookings=bookings, facility=facility_url, year=year, week=week)

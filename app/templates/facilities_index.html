@@ -9,16 +9,18 @@
     {% endblock %}
   </h2>
   <div class="grid-container">
-    <div>Time</div>
-    {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
-      <div style="grid-row-start: header; grid-column-start: day-{{ loop.index0 }};">{{ day }}</div>
+  {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+  <div class="grid_sub">
+    <div style="grid-row-start: header;">{{ day }}</div>
+  </div>
+  {% endfor %}
+  {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+  <div class="grid-sub">
+    {% for booking in bookings[loop.index0+1] %}
+      <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }};">{{ booking.datetime.weekday() }}</div>
     {% endfor %}
-    {% for time in ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"] %}
-      <div style="grid-row-start: time-{{ loop.index0 + 8 }}; grid-column-start: time;">{{ time }}</div>
-    {% endfor %}
-    {% for booking in bookings %}
-      <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }}; grid-column: day-{{ booking.datetime.weekday() }}">{{ booking.datetime.weekday() }}</div>
-    {% endfor %}
+  </div>
+  {% endfor %}
   </div>
   <a href="/facilities/{{ facility }}/{{ year }}/{{ week - 1 }}">previous</a>
   <a href="/facilities/{{ facility }}/{{ year }}/{{ week + 1 }}">next</a>

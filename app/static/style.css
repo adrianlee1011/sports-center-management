@@ -76,17 +76,6 @@ a.article-title:hover {
 
 .grid-container {
   display: grid;
-  grid-template-rows:
-    [header] 1fr
-    [time-8] 1fr
-    [time-9] 1fr
-    [time-10] 1fr
-    [time-11] 1fr
-    [time-12] 1fr
-    [time-13] 1fr
-    [time-14] 1fr
-    [time-15] 1fr
-    [time-16] 1fr;
   grid-template-columns:
     [time] 1fr
     [day-0] 1fr
@@ -99,11 +88,35 @@ a.article-title:hover {
   grid-gap: 10px;
   background-color: #2196F3;
   padding: 10px;
-}
-
-.grid-container > div {
   background-color: rgba(255, 255, 255, 0.8);
   text-align: center;
-  padding: 20px 0;
-  font-size: 30px;
+  padding: 1px 0;
+  font-size: 20px;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.grid-sub {
+  display: grid;
+  grid-template-rows:
+    [header] 1fr
+    [time-8] 1fr
+    [time-9] 1fr
+    [time-10] 1fr
+    [time-11] 1fr
+    [time-12] 1fr
+    [time-13] 1fr
+    [time-14] 1fr
+    [time-15] 1fr
+    [time-16] 1fr;
+  grid-gap: 10px;
+  background-color: #2196F3;
+  padding: 10px;
+  grid-auto-columns: 1fr;
+}
+
+.grid-sub > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 1px 0;
+  font-size: 15px;
 }
