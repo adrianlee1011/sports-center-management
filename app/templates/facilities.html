@@ -4,7 +4,8 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{{ url_for( facility.url ) }}">{{ facility.name }}</a>
+        <a class="mr-2" href="{{ url_for( 'show_facility', facility_url=facility.url, year=year, week=week ) }}">{{ facility.name }}</a>
+        {{ facility.url }}
       </div>
     </div>
   </article>
