@@ -90,7 +90,10 @@ def fitness_room():
 
 @app.route('/facilities/squash_court_1')
 def squash_court_1():
-  bookings = models.Booking.query.order_by(models.Booking.id.asc())
+  now = datetime.now()
+  year = now.strftime('%Y')
+  week = now.strftime('%W')
+  bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=1)
   return render_template('facilities/squash_court_1.html', title="Squash Court 1", bookings=bookings)
 
 @app.route('/facilities/squash_court_2')
@@ -107,7 +110,8 @@ def squash_court_4():
 
 @app.route('/facilities/sports_hall')
 def sports_hall():
-  return render_template('facilities/sports_hall.html', title="Sports Hall")
+  bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=2)
+  return render_template('facilities/sports_hall.html', title="Sports Hall", bookings=bookings)
 
 @app.errorhandler(403)
 def access_forbidden_error(error):
