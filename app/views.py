@@ -6,6 +6,21 @@ from datetime import datetime
 from flask_login import login_user, current_user, logout_user, login_required
 
 
+def get_week_number(date):
+  week = datetime.strftime(date, "%W")
+  return week
+
+def get_current_week():
+  current = datetime.strftime(datetime.now(), "%W")
+  return current
+
+def filter_by_week(bookings):
+  new = []
+  for query in bookings:
+    if get_week_number(query.datetime) == get_current_week():
+      new.append(query)
+  return new
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -90,10 +105,8 @@ def fitness_room():
 
 @app.route('/facilities/squash_court_1')
 def squash_court_1():
-  now = datetime.now()
-  year = now.strftime('%Y')
-  week = now.strftime('%W')
-  bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=1)
+  b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=1)
+  bookings = filter_by_week(b)
   return render_template('facilities/squash_court_1.html', title="Squash Court 1", bookings=bookings)
 
 @app.route('/facilities/squash_court_2')
