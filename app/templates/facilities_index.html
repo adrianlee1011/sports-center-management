@@ -8,6 +8,7 @@
     {% block info %}
     {% endblock %}
   </h2>
+  <!--Timetable start-->
   <div class="grid-container">
   <div class="grid-sub-header">
     <div style=>Time</div>
@@ -25,11 +26,16 @@
   {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
   <div class="grid-sub">
     {% for booking in bookings[loop.index0+1] %}
-      <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }};">{{ booking.datetime.weekday() }}</div>
+      {% if booking.activity == -1 %}
+        <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }};">Booked</div>
+      {% else %}
+        <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }};">{{ activity[booking.activity].name }}</div>
+      {% endif %}
     {% endfor %}
   </div>
   {% endfor %}
   </div>
+  <!--Timetable end-->
   <a href="/facilities/{{ facility }}/{{ year }}/{{ week - 1 }}">previous</a>
   <a href="/facilities/{{ facility }}/{{ year }}/{{ week + 1 }}">next</a>
 {% endblock %}

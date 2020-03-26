@@ -133,7 +133,7 @@ def facilities():
 @app.route('/facilities/<facility_url>/<int:year>/<int:week>')
 def show_facility(facility_url, year, week):
   facility = models.Facility.query.filter_by(url=facility_url).first_or_404()
-  
+
   bookings = []
   for i in range(8):
     b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
@@ -146,7 +146,9 @@ def show_facility(facility_url, year, week):
   #bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
   address = 'facilities/' + facility.url + '.html'
   title = facility.name
-  return render_template(address, title=title, bookings=bookings, facility=facility_url, year=year, week=week)
+
+  activity = models.Activity.query.order_by(models.Activity.id.asc())
+  return render_template(address, title=title, bookings=bookings, facility=facility_url, year=year, week=week, activity=activity)
 
 @app.errorhandler(403)
 def access_forbidden_error(error):

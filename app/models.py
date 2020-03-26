@@ -30,3 +30,10 @@ class Booking(db.Model):
   week = db.Column(db.Integer)
   year = db.Column(db.Integer)
   duration = db.Column(db.Integer, nullable=False)
+  activity = db.Column(db.Integer, nullable=False)
+  paid = db.Column(db.Integer, default=0)
+
+class Activity(db.Model):
+  id = db.Column(db.Integer, primary_key=True)
+  facility = db.Column(db.Integer, db.ForeignKey('facility.id'), nullable=False)
+  name = db.Column(db.String)
