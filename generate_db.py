@@ -37,9 +37,9 @@ for i in range(24):
   db.session.commit()
 
 # Adding into Activity table
-a_activity = [[1, "Swimming lesson"], [1, "Water polo"], [1, "Scuba diving"], [2, "Zumba lesson"]]
+a_activity = [[1, "Swimming Lesson"], [1, "Water Polo"], [1, "Scuba Diving"], [1, "Triathlon"], [2, "Zumba lesson"], [2, "HIIT Challenge"], [2, "Cardio Evolution"],[2, "Pilates"], [2, "Circuit Challenge"], [3, "Squash Training"], [3, "Junior Squash Training"], [3, "Private Session"], [4, "Squash Training"],[4, "Junior Squash Training"], [4, "Private Session"], [5, "Squash Training"], [5, "Junior Squash Training"], [5, "Private Session"], [6, "Squash Training"],[6, "Junior Squash Training"], [6, "Private Session"], [7, "Basketball"], [7, "Badminton"], [7, "Netball"], [7, "Futsall"], [7, "Volleyball"]]
 
-for i in range(3):
+for i in range(len(a_activity)):
   a = models.Activity(id=i+1, facility=a_activity[i][0], name=a_activity[i][1])
   db.session.add(a)
   db.session.commit()

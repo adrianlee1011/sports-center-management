@@ -27,7 +27,7 @@
   <div class="grid-sub">
     {% for booking in bookings[loop.index0+1] %}
       {% if booking.activity == -1 %}
-        <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }};">Booked</div>
+        <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }} / time-15 }};">Booked</div>
       {% else %}
         <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }};">{{ activity[booking.activity].name }}</div>
       {% endif %}
