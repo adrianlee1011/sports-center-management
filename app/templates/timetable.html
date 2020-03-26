@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+{% block content %}
+  {% block top %}
+  {% endblock %}
+  <!--Timetable start-->
+  <div class="scroll">
+  <div class="grid-container">
+  <div class="grid-sub-header">
+    <div style=>Time</div>
+  </div>
+  {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+  <div class="grid-sub-header">
+    <div style="grid-row-start: header;">{{ day }}</div>
+  </div>
+  {% endfor %}
+  <div class="grid-sub">
+    {% for time in ["8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"] %}
+      <div style="grid-row-start: time-{{ loop.index0 + 8 }}; grid-column: 1/2;">{{ time }}</div>
+    {% endfor %}
+  </div>
+  {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
+  <div class="grid-sub">
+    {% for booking in bookings[loop.index0+1] %}
+      <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }} / time-{{ booking.datetime.strftime('%-H')|int + booking.duration }};">
+        {% if booking.activity == -1 %}
+          Booked
+        {% else %}
+          {{ activity[booking.activity].name }}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  </div>
+  </div>
+  <!--Timetable end-->
+  <a href="{{ url }}/{{ year }}/{{ week - 1 }}">previous</a>
+  <a href="{{ url }}/{{ year }}/{{ week + 1 }}">next</a>
+{% endblock %}
+{% block bottom %}
+{% endblock %}

@@ -37,3 +37,4 @@ class Activity(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   facility = db.Column(db.Integer, db.ForeignKey('facility.id'), nullable=False)
   name = db.Column(db.String)
+  url = db.Column(db.String(100))

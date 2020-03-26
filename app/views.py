@@ -113,6 +113,12 @@ def account():
 @app.route('/my_bookings', methods=['GET', 'POST'])
 @login_required
 def my_booking():
+  # view bookings
+  bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(user=current_user.id)
+  facilities = models.Facility.query.order_by(models.Facility.id.asc())
+  activities = models.Activity.query.order_by(models.Activity.id.asc())
+
+  # make a booking
   facility = 1
   form = BookingForm()
   if form.validate_on_submit():
@@ -121,7 +127,7 @@ def my_booking():
     db.session.add(booking)
     db.session.commit()
     return redirect(url_for('my_booking'))
-  return render_template('my_bookings.html', title="My Bookings", form=form)
+  return render_template('my_bookings.html', title="My Bookings", bookings=bookings, facilities=facilities, activities=activities, form=form)
 
 @app.route('/facilities')
 def facilities():
@@ -143,12 +149,50 @@ def show_facility(facility_url, year, week):
         filtered_b.append(query)
     bookings.append(filtered_b)
   
-  #bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
   address = 'facilities/' + facility.url + '.html'
   title = facility.name
 
   activity = models.Activity.query.order_by(models.Activity.id.asc())
-  return render_template(address, title=title, bookings=bookings, facility=facility_url, year=year, week=week, activity=activity)
+  return render_template(address, title=title, bookings=bookings, url='/facilities/'+facility_url, year=year, week=week, activity=activity)
+
+@app.route('/activities')
+def activities():
+  year = get_current_year()
+  week = get_current_week()
+  url = '/activities/' + str(year) + '/' + str(week)
+  return redirect(url)
+
+@app.route('/activities/<int:year>/<int:week>')
+def activities_timetable(year, week):
+  bookings = []
+  for i in range(8):
+    b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(week=week).filter_by(year=year)
+    filtered_b = []
+    for query in b:
+      if query.datetime.weekday() == i-1:
+        filtered_b.append(query)
+    bookings.append(filtered_b)
+  
+  activity = models.Activity.query.order_by(models.Activity.id.asc())
+  return render_template('activities.html', title='Activities', bookings=bookings, year=year, week=week, activity=activity, url='/activities')
+
+@app.route('/activities/<activity_url>/<int:year>/<int:week>')
+def show_activity(activity_url, year, week):
+  activity = models.Activity.query.filter_by(url=activity_url).first_or_404()
+
+  bookings = []
+  for i in range(8):
+    b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(activity=activity.id).filter_by(week=week).filter_by(year=year)
+    filtered_b = []
+    for query in b:
+      if query.datetime.weekday() == i-1:
+        filtered_b.append(query)
+    bookings.append(filtered_b)
+  
+  address = 'activities_index.html'
+  title = activity.name
+
+  return render_template(address, title=title, bookings=bookings, year=year, week=week, activity=activity, url='/activities/'+activity_url)
 
 @app.errorhandler(403)
 def access_forbidden_error(error):

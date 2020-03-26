@@ -119,10 +119,13 @@ a.article-title:hover {
     [time-13] 1fr
     [time-14] 1fr
     [time-15] 1fr
-    [time-16] 1fr;
+    [time-16] 1fr
+    [time-17] 0fr;
   grid-gap: 20px;
   background-color: rgb(55, 106, 145);
-  padding: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   grid-auto-columns: 1fr;
 }
 
@@ -131,4 +134,9 @@ a.article-title:hover {
   text-align: center;
   padding: 1px 0;
   font-size: 15px;
+}
+
+div.scroll {
+  overflow: auto;
+  white-space: nowrap;
 }

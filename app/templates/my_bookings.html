@@ -1,5 +1,12 @@
 {% extends "index.html" %}
 {% block content %}
+  <h1>Your bookings</h1>
+  {% for booking in bookings %}
+  <article class="media content-section">
+    {{ facilities[booking.facility-1].name }} - {{ activities[booking.activity].name }} - {{ booking.datetime}} - duration: {{ booking.duration }} hour(s) - paid: {{ booking.paid }}
+  </article>
+  {% endfor %}
+  <h1>Make a new booking</h1>
   <form method='POST'>
     <!--CSFR protection-->
     {{ form.hidden_tag() }}
