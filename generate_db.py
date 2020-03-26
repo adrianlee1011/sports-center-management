@@ -76,7 +76,7 @@ for i in range(len(f_name)):
     time_string = str(current_time)
     date_time = f"2020-{current_month}-{current_day} {time_string.zfill(2)}:00:00"
 
-    b = models.Booking(id=limit*i+j+1, facility=i+1, user=user, datetime=datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S'), week=int(get_week_number(str(date_time))), year=2020, duration=duration, activity=activity_type, paid=paid)
+    b = models.Booking(id=limit*i+j+1, facility=i+1, user=user, datetime=datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S'), week=int(get_week_number(str(date_time))), year=2020, duration=duration, activity=activity_type+1, paid=paid)
     db.session.add(b)
     db.session.commit()
  

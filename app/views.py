@@ -38,6 +38,32 @@ def is_integer_sequence(sequence, length):
     return True
   return False
 
+def is_booking_available(facility, date_time, duration):
+  # check bookings for the same hour
+  same_hour = models.Booking.query.filter_by(facility=facility).filter_by(datetime=datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S')).count()
+  if same_hour != 0:
+    return False
+  # check bookings for the closing time
+  if int(date_time[11:13]) + duration > 17:
+    return False
+  # check booking starting an hour earlier (because it could have duration 2 hours)
+  if int(date_time[11:13]) - 1 < 10:
+    prev_date = date_time[:11] + '0' + str(int(date_time[11:13]) - 1) + date_time[13:]
+  else:
+    prev_date = date_time[:11] + str(int(date_time[11:13]) - 1) + date_time[13:]
+  prev_hour = models.Booking.query.filter_by(facility=facility).filter_by(datetime=datetime.strptime(prev_date, '%Y-%m-%d %H:%M:%S')).filter_by(duration=2).count()
+  if prev_hour != 0:
+    return False
+  # check booking starting an hour later (because the booking could have duration 2 horus)
+  if int(date_time[11:13]) + 1 < 10:
+    next_date = date_time[:11] + '0' + str(int(date_time[11:13]) + 1) + date_time[13:]
+  else:
+    next_date = date_time[:11] + str(int(date_time[11:13]) + 1) + date_time[13:]
+  next_hour = models.Booking.query.filter_by(facility=facility).filter_by(datetime=datetime.strptime(next_date, '%Y-%m-%d %H:%M:%S')).count()
+  if next_hour != 0 and duration == 2:
+    return False
+  return True
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -101,7 +127,7 @@ def account():
       db.session.commit()
       flash('Account has been updated', 'success')
     else:
-      flash('Invalid card details', 'error')
+      flash('Invalid card details', 'danger')
     return redirect(url_for('account'))
   elif request.method == 'GET':
     form.email.data = current_user.email
@@ -112,21 +138,25 @@ def account():
 
 @app.route('/my_bookings', methods=['GET', 'POST'])
 @login_required
-def my_booking():
+def my_bookings():
   # view bookings
   bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(user=current_user.id)
   facilities = models.Facility.query.order_by(models.Facility.id.asc())
   activities = models.Activity.query.order_by(models.Activity.id.asc())
 
   # make a booking
-  facility = 1
   form = BookingForm()
   if form.validate_on_submit():
-    print('yeeeey', 'success')
-    booking = models.Booking(facility=facility, user=current_user.id, datetime=datetime.now(), week=get_current_week(), year=get_current_year(), duration=form.duration.data)
-    db.session.add(booking)
-    db.session.commit()
-    return redirect(url_for('my_booking'))
+    act = models.Activity.query.filter_by(id=form.activity.data).first()
+    facility_id = act.facility
+    if is_booking_available(facility_id, form.date_time.data, form.duration.data):
+      booking = models.Booking(facility=facility_id, user=current_user.id, datetime=datetime.strptime(form.date_time.data, '%Y-%m-%d %H:%M:%S'), week=get_week_number(datetime.strptime(form.date_time.data, '%Y-%m-%d %H:%M:%S')), year=get_year_number(datetime.strptime(form.date_time.data, '%Y-%m-%d %H:%M:%S')), duration=form.duration.data, activity=form.activity.data)
+      db.session.add(booking)
+      db.session.commit()
+      flash("Success! Booking made!", "success")
+    else:
+      flash("Booking not available for the chosen time.", "danger")
+    return redirect(url_for('my_bookings'))
   return render_template('my_bookings.html', title="My Bookings", bookings=bookings, facilities=facilities, activities=activities, form=form)
 
 @app.route('/facilities')
@@ -142,7 +172,7 @@ def show_facility(facility_url, year, week):
 
   bookings = []
   for i in range(8):
-    b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
+    b = models.Booking.query.filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
     filtered_b = []
     for query in b:
       if query.datetime.weekday() == i-1:
@@ -169,7 +199,7 @@ def activities_timetable(year, week):
     b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(week=week).filter_by(year=year)
     filtered_b = []
     for query in b:
-      if query.datetime.weekday() == i-1:
+      if query.datetime.weekday() == i-1 and query.activity != -1:
         filtered_b.append(query)
     bookings.append(filtered_b)
   
@@ -192,6 +222,7 @@ def show_activity(activity_url, year, week):
   address = 'activities_index.html'
   title = activity.name
 
+  activity = models.Activity.query.order_by(models.Activity.id.asc())
   return render_template(address, title=title, bookings=bookings, year=year, week=week, activity=activity, url='/activities/'+activity_url)
 
 @app.errorhandler(403)

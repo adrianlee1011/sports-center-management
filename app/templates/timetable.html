@@ -25,7 +25,9 @@
         {% if booking.activity == -1 %}
           Booked
         {% else %}
-          {{ activity[booking.activity].name }}
+          <a href="/activities/{{ activity[booking.activity-1].url }}/{{ year }}/{{ week }}">
+            {{ activity[booking.activity-1].name }}
+          </a>
         {% endif %}
       </div>
     {% endfor %}
@@ -36,6 +38,6 @@
   <!--Timetable end-->
   <a href="{{ url }}/{{ year }}/{{ week - 1 }}">previous</a>
   <a href="{{ url }}/{{ year }}/{{ week + 1 }}">next</a>
-{% endblock %}
-{% block bottom %}
+  {% block bottom %}
+  {% endblock %}
 {% endblock %}

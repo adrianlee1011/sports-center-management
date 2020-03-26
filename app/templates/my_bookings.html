@@ -7,28 +7,58 @@
   </article>
   {% endfor %}
   <h1>Make a new booking</h1>
-  <form method='POST'>
-    <!--CSFR protection-->
-    {{ form.hidden_tag() }}
-    <fieldset class="form-group">
-    <legend class="border-bottom mb-4">Account Info</legend>
-    <!--card expiry field-->
-    <div class="form-group">
-      {{ form.duration.label(class="form-control-label") }}
-      {% if form.duration.errors %}
-        {{ form.duration(class="form-control form-control-lg is-invalid") }}
-        <div class="inalid-feedback">
-          {% for error in form.duration.errors %}
-            <span>{{ error }}</span>
-          {% endfor %}
-        </div>
-      {% else %}
-        {{ form.duration(class="form-control form-control-lg") }}
-      {% endif %}
-    </div>
-    <!--submit button-->
-    <div class="form-group">
-      {{ form.submit(class="btw btn-outline-info") }}
-    </div>
-  </form>
+  <h2>
+    <form method='POST'>
+      <!--CSFR protection-->
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Account Info</legend>
+      <!--activity-->
+      <div class="form-group">
+        {{ form.activity.label(class="form-control-label") }}
+        {% if form.activity.errors %}
+          {{ form.activity(class="form-control form-control-lg is-invalid") }}
+          <div class="inalid-feedback">
+            {% for error in form.activity.errors %}
+              <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.activity(class="form-control form-control-lg") }}
+        {% endif %}
+      </div>
+      <!--date_time-->
+      <div class="form-group">
+        {{ form.date_time.label(class="form-control-label") }}
+        {% if form.date_time.errors %}
+          {{ form.date_time(class="form-control form-control-lg is-invalid") }}
+          <div class="inalid-feedback">
+            {% for error in form.date_time.errors %}
+              <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.date_time(class="form-control form-control-lg") }}
+        {% endif %}
+      </div>
+      <!--duration-->
+      <div class="form-group">
+        {{ form.duration.label(class="form-control-label") }}
+        {% if form.duration.errors %}
+          {{ form.duration(class="form-control form-control-lg is-invalid") }}
+          <div class="inalid-feedback">
+            {% for error in form.duration.errors %}
+              <span>{{ error }}</span>
+            {% endfor %}
+          </div>
+        {% else %}
+          {{ form.duration(class="form-control form-control-lg") }}
+        {% endif %}
+      </div>
+      <!--submit button-->
+      <div class="form-group">
+        {{ form.submit(class="btw btn-outline-info") }}
+      </div>
+    </form>
+  </h2>
 {% endblock %}
