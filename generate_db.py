@@ -37,10 +37,9 @@ for i in range(24):
   db.session.commit()
 
 # Adding into Activity table
-a_facility = [1, 1, 2]
-a_name = ["swimming lessons", "water polo", "zumba lesson"]
+a_activity = [[1, "Swimming lesson"], [1, "Water polo"], [1, "Scuba diving"], [2, "Zumba lesson"]]
 
 for i in range(3):
-  a = models.Activity(id=i+1, facility=a_facility[i], name=a_name[i])
+  a = models.Activity(id=i+1, facility=a_activity[i][0], name=a_activity[i][1])
   db.session.add(a)
   db.session.commit()
