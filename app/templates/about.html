@@ -5,4 +5,30 @@
     <p class="article-content">Web info, authors etc.</p>
   </article>
   <h3 class="ml-80">created by SEP group number 22</h3>
+  <!--experiments-->
+<select id="membershipOptions" onclick="myFunction()">
+  <option value="0">No Membership</option>
+  <option value="1">Month Membership</option>
+  <option value="2">Annual Membership</option>
+</select>
+
+<div id="cardDetails" style="display:none">
+  <h1>
+    This is the rest of the form.
+  </h1>
+</div>
+
+<script>
+function myFunction() {
+  var x = document.getElementById("membershipOptions");
+  var y = document.getElementById("cardDetails");
+  var strUser = x.options[x.selectedIndex].text;
+  if (x.selectedIndex === 0) {
+    y.style.display = "none";
+  } else {
+    y.style.display = "block";
+  }
+}
+</script>
+<!--end experiments-->
 {% endblock %}

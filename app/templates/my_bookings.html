@@ -15,17 +15,7 @@
       <legend class="border-bottom mb-4">Account Info</legend>
       <!--activity-->
       <div class="form-group">
-        {{ form.activity.label(class="form-control-label") }}
-        {% if form.activity.errors %}
-          {{ form.activity(class="form-control form-control-lg is-invalid") }}
-          <div class="inalid-feedback">
-            {% for error in form.activity.errors %}
-              <span>{{ error }}</span>
-            {% endfor %}
-          </div>
-        {% else %}
-          {{ form.activity(class="form-control form-control-lg") }}
-        {% endif %}
+        {{ form.activity(class="form-control form-control-lg") }}
       </div>
       <!--date_time-->
       <div class="form-group">

@@ -1,6 +1,6 @@
-from flask_wtf import Form
+from flask_wtf import Form, FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from app.models import User
 
@@ -38,7 +38,6 @@ class UpdateAccountForm(Form):
 
 class BookingForm(Form):
   date_time = StringField('Date and Time', validators=[DataRequired()])
-  activity = IntegerField('Activity', validators=[DataRequired()])
+  activity = SelectField('Activity', coerce=int, choices=[])
   duration = IntegerField('Duration', validators=[DataRequired()])
-  submit = SubmitField('Make Booking')
-  
+  submit = SubmitField('Make Booking')  

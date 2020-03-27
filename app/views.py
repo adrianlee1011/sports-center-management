@@ -146,6 +146,7 @@ def my_bookings():
 
   # make a booking
   form = BookingForm()
+  form.activity.choices = [(activity.id, activity.name) for activity in models.Activity.query.all()]
   if form.validate_on_submit():
     act = models.Activity.query.filter_by(id=form.activity.data).first()
     facility_id = act.facility
