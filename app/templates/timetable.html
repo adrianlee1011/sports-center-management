@@ -22,7 +22,7 @@
   <div class="grid-sub">
     {% for booking in bookings[loop.index0+1] %}
       <div style="grid-row: time-{{ booking.datetime.strftime('%-H') }} / time-{{ booking.datetime.strftime('%-H')|int + booking.duration }};">
-        {% if booking.activity == -1 %}
+        {% if booking.activity == 0 %}
           Booked
         {% else %}
           <a href="/activities/{{ activity[booking.activity-1].url }}/{{ year }}/{{ week }}">
