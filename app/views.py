@@ -1,8 +1,8 @@
 from flask import render_template, flash, url_for, redirect, request, abort
 from app import app, db, models, bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from .forms import RegisterForm, LoginForm, UpdateAccountForm, BookingForm
-from datetime import datetime
+from .forms import RegisterForm, LoginForm, UpdateAccountForm, BookingForm, ChangeTimetable
+from datetime import datetime, timedelta, date
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -39,6 +39,9 @@ def is_integer_sequence(sequence, length):
   return False
 
 def is_booking_available(facility, date_time, duration):
+  # check booking is in the future
+  if datetime.strptime(date_time, "%Y-%m-%d %H:%M:%S") < datetime.now():
+    return False
   # check bookings for the same hour
   same_hour = models.Booking.query.filter_by(facility=facility).filter_by(datetime=datetime.strptime(date_time, '%Y-%m-%d %H:%M:%S')).count()
   if same_hour != 0:
@@ -63,6 +66,16 @@ def is_booking_available(facility, date_time, duration):
   if next_hour != 0 and duration == 2:
     return False
   return True
+
+def get_dates_for_week(year, week):
+  date = datetime.strptime(str(year), "%Y")
+  date += timedelta(weeks=week)
+  dates = []
+  while date.weekday() != 0:
+    date += timedelta(days=-1)
+  for i in range(7):
+    dates.append(datetime.strftime(date + timedelta(days=i), '%d/%m'))
+  return dates
 
 @app.route('/')
 @app.route('/home')
@@ -150,8 +163,11 @@ def my_bookings():
   if form.validate_on_submit():
     act = models.Activity.query.filter_by(id=form.activity.data).first()
     facility_id = act.facility
-    if is_booking_available(facility_id, form.date_time.data, form.duration.data):
-      booking = models.Booking(facility=facility_id, user=current_user.id, datetime=datetime.strptime(form.date_time.data, '%Y-%m-%d %H:%M:%S'), week=get_week_number(datetime.strptime(form.date_time.data, '%Y-%m-%d %H:%M:%S')), year=get_year_number(datetime.strptime(form.date_time.data, '%Y-%m-%d %H:%M:%S')), duration=form.duration.data, activity=form.activity.data)
+    str_date = date.strftime(form.date_time.data, '%Y-%m-%d')
+    date_time = datetime.strptime(str_date, '%Y-%m-%d')
+    date_time += timedelta(hours=form.time.data + 7)
+    if is_booking_available(facility_id, datetime.strftime(date_time, "%Y-%m-%d %H:%M:%S"), form.duration.data):
+      booking = models.Booking(facility=facility_id, user=current_user.id, datetime=date_time, week=get_week_number(date_time), year=get_year_number(date_time), duration=form.duration.data, activity=form.activity.data)
       db.session.add(booking)
       db.session.commit()
       flash("Success! Booking made!", "success")
@@ -167,10 +183,13 @@ def facilities():
   facilities = models.Facility.query.order_by(models.Facility.id.asc())
   return render_template('facilities.html', title="Facilities", facilities=facilities, year=year, week=week)
 
-@app.route('/facilities/<facility_url>/<int:year>/<int:week>')
+@app.route('/facilities/<facility_url>/<int:year>/<int:week>', methods = ['GET', 'POST'])
 def show_facility(facility_url, year, week):
   facility = models.Facility.query.filter_by(url=facility_url).first_or_404()
 
+  tform = ChangeTimetable()
+  if tform.validate_on_submit():
+    flash("this message", "danger")
   bookings = []
   for i in range(8):
     b = models.Booking.query.filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
@@ -184,7 +203,8 @@ def show_facility(facility_url, year, week):
   title = facility.name
 
   activity = models.Activity.query.order_by(models.Activity.id.asc())
-  return render_template(address, title=title, bookings=bookings, url='/facilities/'+facility_url, year=year, week=week, activity=activity)
+  dates = get_dates_for_week(year, week)
+  return render_template(address, title=title, bookings=bookings, url='/facilities/'+facility_url, year=year, week=week, activity=activity, dates=dates, tform=tform)
 
 @app.route('/activities')
 def activities():
@@ -193,8 +213,9 @@ def activities():
   url = '/activities/' + str(year) + '/' + str(week)
   return redirect(url)
 
-@app.route('/activities/<int:year>/<int:week>')
+@app.route('/activities/<int:year>/<int:week>', methods = ['GET', 'POST'])
 def activities_timetable(year, week):
+  tform = ChangeTimetable()
   bookings = []
   for i in range(8):
     b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(week=week).filter_by(year=year)
@@ -205,10 +226,14 @@ def activities_timetable(year, week):
     bookings.append(filtered_b)
   
   activity = models.Activity.query.order_by(models.Activity.id.asc())
-  return render_template('activities.html', title='Activities', bookings=bookings, year=year, week=week, activity=activity, url='/activities')
+  dates = get_dates_for_week(year, week)
+  return render_template('activities.html', title='Activities', bookings=bookings, year=year, week=week, activity=activity, url='/activities', dates=dates, tform=tform)
 
-@app.route('/activities/<activity_url>/<int:year>/<int:week>')
+@app.route('/activities/<activity_url>/<int:year>/<int:week>', methods = ['GET', 'POST'])
 def show_activity(activity_url, year, week):
+  new_booking = False
+  # timetable for activity
+  tform = ChangeTimetable()
   activity = models.Activity.query.filter_by(url=activity_url).first_or_404()
 
   bookings = []
@@ -220,11 +245,50 @@ def show_activity(activity_url, year, week):
         filtered_b.append(query)
     bookings.append(filtered_b)
   
-  address = 'activities_index.html'
   title = activity.name
-
   activity = models.Activity.query.order_by(models.Activity.id.asc())
-  return render_template(address, title=title, bookings=bookings, year=year, week=week, activity=activity, url='/activities/'+activity_url)
+  dates = get_dates_for_week(year, week)
+  return render_template('activities_index.html', title=title, bookings=bookings, year=year, week=week, activity=activity, url='/activities/'+activity_url, new_bookng=new_booking, dates=dates, tform=tform)
+
+@app.route('/activities/<activity_url>/booking/<int:booking_id>/<int:year>/<int:week>', methods = ['GET', 'POST'])
+def book_activity(activity_url, booking_id, year, week):
+  new_booking = True
+  # timetable for activity
+  activity = models.Activity.query.filter_by(url=activity_url).first_or_404()
+
+  bookings = []
+  for i in range(8):
+    b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(activity=activity.id).filter_by(week=week).filter_by(year=year)
+    filtered_b = []
+    for query in b:
+      if query.datetime.weekday() == i-1:
+        filtered_b.append(query)
+    bookings.append(filtered_b)
+  
+  title = activity.name
+  activity = models.Activity.query.order_by(models.Activity.id.asc())
+  dates = get_dates_for_week(year, week)
+  tform = ChangeTimetable()
+
+  # make a booking
+  form = BookingForm()
+  form.activity.data = models.Activity.query.filter_by(url=activity_url).first().id
+  form.activity.choices = [(activity.id, activity.name) for activity in models.Activity.query.all()]
+  if form.validate_on_submit():
+    act = models.Activity.query.filter_by(id=form.activity.data).first()
+    facility_id = act.facility
+    str_date = date.strftime(form.date_time.data, '%Y-%m-%d')
+    date_time = datetime.strptime(str_date, '%Y-%m-%d')
+    date_time += timedelta(hours=form.time.data + 7)
+    if is_booking_available(facility_id, datetime.strftime(date_time, "%Y-%m-%d %H:%M:%S"), form.duration.data):
+      booking = models.Booking(facility=facility_id, user=current_user.id, datetime=date_time, week=get_week_number(date_time), year=get_year_number(date_time), duration=form.duration.data, activity=form.activity.data)
+      db.session.add(booking)
+      db.session.commit()
+      flash("Success! Booking made!", "success")
+    else:
+      flash("Booking not available for the chosen time.", "danger")
+    return redirect(url_for('my_bookings'))
+  return render_template('activities_index.html', title=title, bookings=bookings, year=year, week=week, activity=activity, url='/activities/'+activity_url, new_booking=new_booking, form=form, dates=dates, tform=tform)
 
 @app.errorhandler(403)
 def access_forbidden_error(error):

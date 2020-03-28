@@ -38,7 +38,12 @@ class UpdateAccountForm(Form):
         raise ValidationError('Email already registered.')
 
 class BookingForm(Form):
-  date_time = DateField('Date and Time', format='%y-%m-%d')
+  date_time = DateField('Date', validators=[DataRequired()])
+  time = SelectField('Time', coerce=int, choices=([1, "08:00"], [2, "09:00"], [3, "10:00"], [4, "11:00"], [5, "12:00"], [6, "13:00"], [7, "14:00"], [8, "15:00"], [9, "16:00"]))
   activity = SelectField('Activity', coerce=int, choices=[])
-  duration = IntegerField('Duration', validators=[DataRequired()])
-  submit = SubmitField('Make Booking')  
+  duration = SelectField('Duration', coerce=int, choices=([1, 1], [2, 2]))
+  submit = SubmitField('Make Booking')
+
+class ChangeTimetable(Form):
+  date = DateField('Date', format='%y-%m-%d')
+  submit = SubmitField('Change Date')

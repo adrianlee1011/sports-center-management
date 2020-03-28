@@ -15,6 +15,7 @@
       <legend class="border-bottom mb-4">Account Info</legend>
       <!--activity-->
       <div class="form-group">
+        {{ form.activity.label(class="form-control-label") }}
         {{ form.activity(class="form-control form-control-lg") }}
       </div>
       <!--date_time-->
@@ -30,6 +31,11 @@
         {% else %}
           {{ form.date_time(class="form-control form-control-lg") }}
         {% endif %}
+      </div>
+      <!--time-->
+      <div class="form-group">
+        {{ form.time.label(class="form-control-label") }}
+        {{ form.time(class="form-control form-control-lg") }}
       </div>
       <!--duration-->
       <div class="form-group">

@@ -10,7 +10,7 @@
   </div>
   {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %}
   <div class="grid-sub-header">
-    <div style="grid-row-start: header;">{{ day }}</div>
+    <div style="grid-row-start: header;">{{ day }}<br>{{ dates[loop.index0] }}</div>
   </div>
   {% endfor %}
   <div class="grid-sub">
@@ -25,7 +25,7 @@
         {% if booking.activity == 0 %}
           Booked
         {% else %}
-          <a href="/activities/{{ activity[booking.activity-1].url }}/{{ year }}/{{ week }}">
+          <a href="/activities/{{ activity[booking.activity-1].url }}/booking/{{ booking.id }}/{{ year }}/{{ week }}">
             {{ activity[booking.activity-1].name }}
           </a>
         {% endif %}
@@ -38,6 +38,14 @@
   <!--Timetable end-->
   <a href="{{ url }}/{{ year }}/{{ week - 1 }}">previous</a>
   <a href="{{ url }}/{{ year }}/{{ week + 1 }}">next</a>
+  <form method='POST'>
+    <!--CSFR protection-->
+    {{ tform.hidden_tag() }}
+    <!--change timetable-->
+    {{ tform.date }}
+    <!--submit button-->
+    {{ tform.submit }}
+  </form>
   {% block bottom %}
   {% endblock %}
 {% endblock %}

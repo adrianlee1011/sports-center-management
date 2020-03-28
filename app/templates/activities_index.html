@@ -1,5 +1,57 @@
 {% extends "timetable.html" %}
 {% block top %}
+{% if new_booking %}
+<h2>
+  <form method='POST'>
+    <!--CSFR protection-->
+    {{ form.hidden_tag() }}
+    <fieldset class="form-group">
+    <legend class="border-bottom mb-4">Account Info</legend>
+    <!--activity-->
+    <div class="form-group">
+      {{ form.activity.label(class="form-control-label") }}
+      {{ form.activity(class="form-control form-control-lg") }}
+    </div>
+    <!--date_time-->
+    <div class="form-group">
+      {{ form.date_time.label(class="form-control-label") }}
+      {% if form.date_time.errors %}
+        {{ form.date_time(class="form-control form-control-lg is-invalid") }}
+        <div class="inalid-feedback">
+          {% for error in form.date_time.errors %}
+            <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% else %}
+        {{ form.date_time(class="form-control form-control-lg") }}
+      {% endif %}
+    </div>
+    <!--time-->
+    <div class="form-group">
+      {{ form.time.label(class="form-control-label") }}
+      {{ form.time(class="form-control form-control-lg") }}
+    </div>
+    <!--duration-->
+    <div class="form-group">
+      {{ form.duration.label(class="form-control-label") }}
+      {% if form.duration.errors %}
+        {{ form.duration(class="form-control form-control-lg is-invalid") }}
+        <div class="inalid-feedback">
+          {% for error in form.duration.errors %}
+            <span>{{ error }}</span>
+          {% endfor %}
+        </div>
+      {% else %}
+        {{ form.duration(class="form-control form-control-lg") }}
+      {% endif %}
+    </div>
+    <!--submit button-->
+    <div class="form-group">
+      {{ form.submit(class="btw btn-outline-info") }}
+    </div>
+  </form>
+</h2>
+{% endif %}
 {% endblock %}
 {% block bottom %}
 {% endblock %}
