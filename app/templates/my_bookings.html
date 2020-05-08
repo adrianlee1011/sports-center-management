@@ -51,6 +51,11 @@
           {{ form.duration(class="form-control form-control-lg") }}
         {% endif %}
       </div>
+      <!-- payment choice -->
+      <div class="form-group">
+        {{ form.payment.label(class="form-control-label") }}
+        {{ form.payment(class="form-control form-control-lg") }}
+      </div>
       <!--submit button-->
       <div class="form-group">
         {{ form.submit(class="btw btn-outline-info") }}

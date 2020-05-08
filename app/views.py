@@ -154,6 +154,10 @@ def account():
 def my_bookings():
   # view bookings
   bookings = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(user=current_user.id)
+  future_bookings = []
+  for booking in bookings:
+    if booking.datetime > datetime.now():
+      future_bookings.append(booking)
   facilities = models.Facility.query.order_by(models.Facility.id.asc())
   activities = models.Activity.query.order_by(models.Activity.id.asc())
 
@@ -166,15 +170,22 @@ def my_bookings():
     str_date = date.strftime(form.date_time.data, '%Y-%m-%d')
     date_time = datetime.strptime(str_date, '%Y-%m-%d')
     date_time += timedelta(hours=form.time.data + 7)
+    payment_method = form.payment.data
     if is_booking_available(facility_id, datetime.strftime(date_time, "%Y-%m-%d %H:%M:%S"), form.duration.data):
-      booking = models.Booking(facility=facility_id, user=current_user.id, datetime=date_time, week=get_week_number(date_time), year=get_year_number(date_time), duration=form.duration.data, activity=form.activity.data)
+      if payment_method == 2:
+        if "none" in [current_user.card_number, current_user.card_expiry, current_user.card_CVC]:
+          flash("Please update your card details with valid information.", "danger")
+          return redirect(url_for('my_bookings'))
+        booking = models.Booking(facility=facility_id, user=current_user.id, datetime=date_time, week=get_week_number(date_time), year=get_year_number(date_time), duration=form.duration.data, activity=form.activity.data, paid=1)
+      else:
+        booking = models.Booking(facility=facility_id, user=current_user.id, datetime=date_time, week=get_week_number(date_time), year=get_year_number(date_time), duration=form.duration.data, activity=form.activity.data)
       db.session.add(booking)
       db.session.commit()
       flash("Success! Booking made!", "success")
     else:
       flash("Booking not available for the chosen time.", "danger")
     return redirect(url_for('my_bookings'))
-  return render_template('my_bookings.html', title="My Bookings", bookings=bookings, facilities=facilities, activities=activities, form=form)
+  return render_template('my_bookings.html', title="My Bookings", bookings=future_bookings, facilities=facilities, activities=activities, form=form)
 
 @app.route('/facilities')
 def facilities():
