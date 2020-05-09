@@ -42,6 +42,7 @@ class BookingForm(Form):
   time = SelectField('Time', coerce=int, choices=([1, "08:00"], [2, "09:00"], [3, "10:00"], [4, "11:00"], [5, "12:00"], [6, "13:00"], [7, "14:00"], [8, "15:00"], [9, "16:00"]))
   activity = SelectField('Activity', coerce=int, choices=[])
   duration = SelectField('Duration', coerce=int, choices=([1, 1], [2, 2]))
+  payment = SelectField('Payment method', coerce=int, choices=([1, "Cash"], [2, "Card"]))
   submit = SubmitField('Make Booking')
 
 class ChangeTimetable(Form):

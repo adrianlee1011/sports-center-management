@@ -3,7 +3,7 @@
   <h1>Your bookings</h1>
   {% for booking in bookings %}
   <article class="media content-section">
-    {{ facilities[booking.facility-1].name }} - {{ activities[booking.activity].name }} - {{ booking.datetime}} - duration: {{ booking.duration }} hour(s) - paid: {{ booking.paid }}
+    {{ facilities[booking.facility-1].name }} - {{ activities[booking.activity-1].name }} - {{ booking.datetime}} - duration: {{ booking.duration }} hour(s) - paid: {{ booking.paid }}
   </article>
   {% endfor %}
   <h1>Make a new booking</h1>
@@ -50,6 +50,11 @@
         {% else %}
           {{ form.duration(class="form-control form-control-lg") }}
         {% endif %}
+      </div>
+      <!-- payment choice -->
+      <div class="form-group">
+        {{ form.payment.label(class="form-control-label") }}
+        {{ form.payment(class="form-control form-control-lg") }}
       </div>
       <!--submit button-->
       <div class="form-group">
