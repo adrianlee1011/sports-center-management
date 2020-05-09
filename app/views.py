@@ -200,7 +200,10 @@ def show_facility(facility_url, year, week):
 
   tform = ChangeTimetable()
   if tform.validate_on_submit():
-    flash("this message", "danger")
+    date_choice = tform.date.data
+    week = int(get_week_number(date_choice))
+    year = int(get_year_number(date_choice))
+    return redirect(url_for('show_facility', facility_url=facility.url, year=year, week=week))
   bookings = []
   for i in range(8):
     b = models.Booking.query.filter_by(facility=facility.id).filter_by(week=week).filter_by(year=year)
@@ -227,6 +230,11 @@ def activities():
 @app.route('/activities/<int:year>/<int:week>', methods = ['GET', 'POST'])
 def activities_timetable(year, week):
   tform = ChangeTimetable()
+  if tform.validate_on_submit():
+    date_choice = tform.date.data
+    week = int(get_week_number(date_choice))
+    year = int(get_year_number(date_choice))
+    return redirect(url_for('activities_timetable', year=year, week=week))
   bookings = []
   for i in range(8):
     b = models.Booking.query.order_by(models.Booking.id.asc()).filter_by(week=week).filter_by(year=year)
@@ -246,6 +254,11 @@ def show_activity(activity_url, year, week):
   # timetable for activity
   tform = ChangeTimetable()
   activity = models.Activity.query.filter_by(url=activity_url).first_or_404()
+  if tform.validate_on_submit():
+    date_choice = tform.date.data
+    week = int(get_week_number(date_choice))
+    year = int(get_year_number(date_choice))
+    return redirect(url_for('show_activity', activity_url=activity.url, year=year, week=week))
 
   bookings = []
   for i in range(8):

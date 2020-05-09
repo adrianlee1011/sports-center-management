@@ -38,13 +38,13 @@
   <!--Timetable end-->
   <a href="{{ url }}/{{ year }}/{{ week - 1 }}">previous</a>
   <a href="{{ url }}/{{ year }}/{{ week + 1 }}">next</a>
-  <form method='POST'>
+  <form method='POST' action="" novalidate>
     <!--CSFR protection-->
     {{ tform.hidden_tag() }}
     <!--change timetable-->
     {{ tform.date }}
     <!--submit button-->
-    {{ tform.submit }}
+    {{ tform.submit() }}
   </form>
   {% block bottom %}
   {% endblock %}

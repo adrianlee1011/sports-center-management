@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import Form, FlaskForm
 from flask_login import current_user
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, IntegerField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
@@ -45,6 +45,6 @@ class BookingForm(Form):
   payment = SelectField('Payment method', coerce=int, choices=([1, "Cash"], [2, "Card"]))
   submit = SubmitField('Make Booking')
 
-class ChangeTimetable(Form):
-  date = DateField('Date', format='%y-%m-%d')
+class ChangeTimetable(FlaskForm):
+  date = DateField('Date')
   submit = SubmitField('Change Date')
