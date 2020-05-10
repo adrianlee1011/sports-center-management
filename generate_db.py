@@ -1,4 +1,4 @@
-from app import db, models
+from app import db, models, bcrypt
 from datetime import datetime, date, time
 import random
 
@@ -43,7 +43,7 @@ limit = 100 # bookings generated for each facility
 for i in range(len(f_name)):
   current_day = 10 # day of the month
   current_time = 8 # start time
-  current_month = 3 # start month
+  current_month = 5 # start month
   activity_index = []
  
   # squash courts have same activities
@@ -82,3 +82,15 @@ for i in range(len(f_name)):
  
     current_time += duration + random.randint(0, 5)
 
+# Adding into User table
+u_names = ["Jacquetta Brakefield", "Genaro Jakubowski", "Amparo Bernal", "Karlyn Basch", "Tisha Cordon", "Voncile Weekes", "Krystin Felten", "Gertha Kitchin", "Vernie Mika", "Charley Merkle", "Fannie Murtagh", "Chantel Fontenot", "Chandra Fabela", "Gearldine Lansing", "Hillary Rahman", "Jacki Delahoussaye", "Shauna Dewey", "Elias Turley", "Jona Shane", "Thao Goudy", "Lottie Ducker", "Kina Corona", "Hanna Correa", "Rikki Bolten", "Rod Penepent", "Tiny Haider", "Jared Kumm", "Willette Fulton", "Rhett Mcgraw", "Mariam Liebig", "Annis Mailman", "Gerard Davies", "Paul Summitt", "Darci Orton", "Andra Wycoff", "Carmelo Schick", "Joselyn Slane", "Johna Gerardi", "Daphine Lundblad", "Mellisa Harjo", "Yadira Bryant", "Jonnie Spainhour", "Otilia Dishman", "Suellen Eberhard", "Augustina Newberg", "Lauralee Tunnell", "Elsy Chowdhury", "Novella Gough", "Queen Lafave", "Denise Marse", "Edyth Monson", "Caryn Sorber", "Malinda Clanton", "Patrick Corbitt", "Kimi Gilland", "Sharron Wikoff", "Eddy Trotman", "Gregory Gerdes", "Awilda Ledoux", "Tamela Kyer", "Ali Licata", "Tasha Mchone", "Ellie Bassett", "Geralyn Longmire", "Galina Flynn", "Cheree Schaar", "Santana Faddis", "Sarita Siders", "Georgene Lamark", "Madaline Rossi", "Shanon Conant", "Merry Golliday", "Myrl Brannon", "Hester Dupuy", "Neoma Mcdougle", "Dominic Groen", "Willette Jose", "April Jackman", "Fran Hess", "Angella Duffel", "Vera Macomber", "Tia Mickley", "Valarie Gula", "Lyndon Bizier", "Majorie Maskell", "Silva Hickey", "Clarita Pille", "Cris Fennessey", "Joann Tremblay", "Tana Broaddus", "Kara Niebuhr", "Maragaret Jardin", "Dario Sturgis", "Emery Counts", "Chloe Turley", "Carlos Way", "Carl Linhart", "Micha Hollowell", "Patria Adamson", "Berniece Guillermo", "Patrica Peller", "Andrea Lykes", "Nanci Daffron", "Marline Corkill", "Karol Deak", "Regena Villicana", "Brynn Byrge", "Florentino Ohman", "Arnetta Rusin", "Lael Eslick", "Pandora Holt", "Bradford Bivona", "Margarett Vergara", "Maudie Padro", "Sharika Kinch", "Harriette Bye", "Marg Goddard", "Lenny Hupp", "Lakeesha Omeara", "Tony Montenegro", "Gilberte Viveiros", "Freida Akers", "Palmira Metz", "Francesca Ruhl", "Thelma Dolloff", "Leda Knapik", "Meridith Linder", "Cassy Strawbridge", "Shawn Doxey", "Dayna Miyamoto", "Aleen Ratley", "Angelia Lindner", "Jewell Morse", "Carlie Reis", "Marielle Points", "Tamala Pounders", "Camie Brickhouse", "Keesha Poteat", "Jayne Dakin", "Shera Wink", "Hollis Wendler", "Babara Caines", "Kathryn Ybanez", "Tequila Nathan", "Chase Shadduck", "Vicenta Kindig", "Delbert Meneses", "Rocky Guess", "Nella Flakes", "Danial Nicolosi", "Kurt Pai", "Wesley Mullenax", "Coleman Brazeal", "Doris Ledgerwood", "Donnie Hornstein", "Ardath Redrick", "Irving Badillo", "Felix Braley", "Stacy Parchman", "Larae Kayser", "Yajaira Bisceglia", "Rolland Stauffer", "Karey Kawakami", "Jamison Velasquez", "Marcel Cichon", "Johna Leister", "Tamie Reeves", "Sue Chenard", "Trinh Patel", "Minnie Narcisse", "Kenia Bolt", "Hortencia Laurent", "Nelly Corman", "Wilbert Vanbuskirk", "Junior Mclemore", "Akilah Nolin", "Francisco Voisine", "Bev Thiry", "Bea Nevius", "Andera Hilty", "Audrie Salls", "Rubie Tito", "Buena Magby", "Brendon Trieu", "Roselia Port", "Kathaleen Lobato", "Nathanael Boggan", "Talitha Morriss", "Robert Causby", "Kam Tiggs", "Nichol Henery", "Lacresha Bissette", "Shanice Nath", "Jaquelyn Mcchesney", "Inocencia Erlandson", "Hanna Surratt", "Ricki Redmond", "Guy Hakim", "Elias Hoban", "Daniella Bonar"]
+
+for i in range(len(u_names)):
+  names = u_names[i].split()
+  u_email = names[0] + '.' + names[1] + "@gmail.com"
+  u_password = bcrypt.generate_password_hash("secret_password").decode('utf-8')
+  u = models.User(id=i+1, name=u_names[i], email=u_email, password=u_password, user_type=1, card_number="none", card_expiry="none", card_CVC="none")
+  db.session.add(u)
+  db.session.commit()
+
+print("Database successfully generated!")
