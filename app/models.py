@@ -21,6 +21,7 @@ class Facility(db.Model):
   name = db.Column(db.String(100), nullable=False)
   capacity = db.Column(db.Integer)
   url = db.Column(db.String(100))
+  description = db.Column(db.String, default="No description available!")
 
 class Booking(db.Model):
   id = db.Column(db.Integer, primary_key=True)

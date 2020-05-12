@@ -213,12 +213,12 @@ def show_facility(facility_url, year, week):
         filtered_b.append(query)
     bookings.append(filtered_b)
   
-  address = 'facilities/' + facility.url + '.html'
   title = facility.name
+  description = facility.description
 
   activity = models.Activity.query.order_by(models.Activity.id.asc())
   dates = get_dates_for_week(year, week)
-  return render_template(address, title=title, bookings=bookings, url='/facilities/'+facility_url, year=year, week=week, activity=activity, dates=dates, tform=tform)
+  return render_template('facilities_index.html', title=title, bookings=bookings, url='/facilities/'+facility_url, year=year, week=week, activity=activity, dates=dates, tform=tform, description=description)
 
 @app.route('/activities')
 def activities():
