@@ -1,7 +1,7 @@
 from flask import render_template, flash, url_for, redirect, request, abort
 from app import app, db, models, bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from .forms import RegisterForm, LoginForm, UpdateAccountForm, BookingForm, ChangeTimetable
+from .forms import RegisterForm, LoginForm, UpdateAccountForm, BookingForm, ChangeTimetable, ManageFacilities
 from datetime import datetime, timedelta, date
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -97,7 +97,7 @@ def register():
   form = RegisterForm()
   if form.validate_on_submit():
     hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-    user = models.User(name=form.name.data, email=form.email.data, password=hashed_password)
+    user = models.User(name=form.name.data, email=form.email.data.lower(), password=hashed_password)
     db.session.add(user)
     db.session.commit()
     flash("Account created for %s!" %form.name.data, 'success')
@@ -110,7 +110,7 @@ def login():
     return redirect(url_for('home'))
   form = LoginForm()
   if form.validate_on_submit():
-    user = models.User.query.filter_by(email=form.email.data).first()
+    user = models.User.query.filter_by(email=form.email.data.lower()).first()
     if user and bcrypt.check_password_hash(user.password, form.password.data):
       login_user(user, remember=form.remember.data)
       next_page = request.args.get('next')
@@ -193,6 +193,26 @@ def facilities():
   week = get_current_week()
   facilities = models.Facility.query.order_by(models.Facility.id.asc())
   return render_template('facilities.html', title="Facilities", facilities=facilities, year=year, week=week)
+
+@app.route('/manage_facilities', methods = ['GET', 'POST'])
+def manage_facilities():
+  form = ManageFacilities()
+  facilities = models.Facility.query.order_by(models.Facility.id.asc())
+  if form.validate_on_submit():
+    facilities[0].description = form.swimming_pool.data
+    facilities[1].description = form.fitness_room.data
+    facilities[2].description = form.squash_court.data
+    facilities[3].description = form.squash_court.data
+    facilities[4].description = form.squash_court.data
+    facilities[5].description = form.squash_court.data
+    facilities[6].description = form.sports_hall.data
+    db.session.commit()
+  else:
+    form.swimming_pool.data = facilities[0].description
+    form.fitness_room.data = facilities[1].description
+    form.squash_court.data = facilities[2].description
+    form.sports_hall.data = facilities[6].description
+  return render_template('manage_facilities.html', title='Manage Facilities', form=form)
 
 @app.route('/facilities/<facility_url>/<int:year>/<int:week>', methods = ['GET', 'POST'])
 def show_facility(facility_url, year, week):

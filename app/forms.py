@@ -48,3 +48,10 @@ class BookingForm(Form):
 class ChangeTimetable(FlaskForm):
   date = DateField('Date')
   submit = SubmitField('Change Date')
+
+class ManageFacilities(Form):
+  swimming_pool = TextAreaField('Swimming Pool')
+  fitness_room = TextAreaField('Fitness Room')
+  squash_court = TextAreaField('Squash Courts')
+  sports_hall = TextAreaField('Sports Hall')
+  submit = SubmitField('Save Changes')

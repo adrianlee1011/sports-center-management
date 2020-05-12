@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+{% block content %}
+  <h1>Manage Facilities</h1>
+  <h2>
+    <form method='POST'>
+      <!--CSFR protection-->
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+      <legend class="border-bottom mb-4">Account Info</legend>
+      <!--swimming_pool-->
+      <div class="form-group">
+        {{ form.swimming_pool.label(class="form-control-label") }}
+        {{ form.swimming_pool(class="form-control form-control-lg") }}
+      </div>
+      <!--fitness_room-->
+      <div class="form-group">
+        {{ form.fitness_room.label(class="form-control-label") }}
+        {{ form.fitness_room(class="form-control form-control-lg") }}
+      </div>
+      <!--squash_court-->
+      <div class="form-group">
+        {{ form.squash_court.label(class="form-control-label") }}
+        {{ form.squash_court(class="form-control form-control-lg") }}
+      </div>
+      <!--sports_hall-->
+      <div class="form-group">
+        {{ form.sports_hall.label(class="form-control-label") }}
+        {{ form.sports_hall(class="form-control form-control-lg") }}
+      </div>
+      <!--submit button-->
+      <div class="form-group">
+        {{ form.submit(class="btw btn-outline-info") }}
+      </div>
+    </form>
+  </h2>
+{% endblock %}
