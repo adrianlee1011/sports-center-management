@@ -21,7 +21,7 @@ Flask-WTF==0.14.2
 flipflop==1.0
 guess-language==0.2
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 Mako==1.1.0
 MarkupSafe==1.1.1
 pbr==5.4.4
