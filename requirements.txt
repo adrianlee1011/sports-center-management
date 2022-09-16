@@ -22,7 +22,7 @@ flipflop==1.0
 guess-language==0.2
 itsdangerous==1.1.0
 Jinja2==2.10.3
-Mako==1.1.0
+Mako==1.2.2
 MarkupSafe==1.1.1
 pbr==5.4.4
 pkg-resources==0.0.0
